@@ -8,6 +8,7 @@ Your friend sends a Spotify link, you have YouTube Music. You send a YouTube Mus
 
 ## What it does
 
+
 - **Paste anything.** A bare link, a `spotify:` URI, a short `spotify.link`, a YouTube/YouTube Music/youtu.be link, or a whole message with a link somewhere in it.
 - **One big Copy button**, plus Open and Share (on phones). The result can be **copied automatically** as soon as it's ready.
 - **Copy both links** gives you the song name with the Spotify and YouTube Music links, so whoever gets it can tap theirs.
