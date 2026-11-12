@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>streamBud · Spotify ⇄ YouTube Music</title>
+  <meta name="description" content="Paste a Spotify link, get the YouTube Music link. Paste a YouTube Music link, get the Spotify one. Free, no sign-up.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'">
+  <meta name="theme-color" content="#0b0b0f" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4f4f7" media="(prefers-color-scheme: light)">
+  <meta name="color-scheme" content="dark light">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="streamBud">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta property="og:title" content="streamBud · Spotify ⇄ YouTube Music">
+  <meta property="og:description" content="Paste a link from either one. Get the other.">
+  <meta property="og:image" content="/icons/icon-512.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="/icons/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true">
+    <defs>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-open" viewBox="0 0 24 24"><path d="M14 3h7v7M10 14 21 3M19 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="i-paste" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h1.5A2.5 2.5 0 0 1 20 6.5v13a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 19.5v-13A2.5 2.5 0 0 1 6.5 4H8"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5M12 16h.01"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M9 7.5v9l7.5-4.5z" fill="currentColor" stroke="none"/></symbol>
+    </defs>
+  </svg>
+
+  <main class="app">
+    <header class="brand">
+      <img src="/icons/icon.svg" alt="" width="28" height="28">
+      <span>streamBud</span>
+    </header>
+
+    <section class="hero">
+      <h1>
+        <span class="svc"><i class="dot spotify"></i>Spotify</span>
+        <span class="swap" aria-label="to and from">⇄</span>
+        <span class="svc"><i class="dot youtubeMusic"></i>YouTube Music</span>
+      </h1>
+      <p>Paste a link from either one. Get the other.</p>
+    </section>
+
+    <form id="form" class="field" autocomplete="off" novalidate>
+      <label for="link" class="sr-only">Song link</label>
+      <input id="link" name="link" type="text" inputmode="url" enterkeyhint="go"
+             placeholder="Paste a Spotify or YouTube Music link"
+             autocapitalize="off" autocorrect="off" spellcheck="false">
+      <button type="button" id="clear" class="icon-btn" aria-label="Clear" hidden>
+        <svg class="i"><use href="#i-x"/></svg>
+      </button>
+      <button type="button" id="paste" class="btn paste">
+        <svg class="i"><use href="#i-paste"/></svg><span>Paste</span>
+      </button>
+    </form>
+
+    <label class="toggle">
+      <input type="checkbox" id="auto-copy" checked>
+      <span class="track" aria-hidden="true"></span>
+      <span>Copy the result automatically</span>
+    </label>
+
+    <section id="result" class="result" aria-live="polite" hidden></section>
+
+    <section id="recent" class="recent" hidden>
+      <div class="section-head">
+        <h2>Recent</h2>
+        <button type="button" id="clear-history" class="text-btn">Clear</button>
+      </div>
+      <ul id="recent-list" class="recent-list"></ul>
+    </section>
+
+    <details class="tips">
+      <summary>Skip the copy-paste: share straight from the app</summary>
+      <div class="tips-body">
+        <h3>Android</h3>
+        <ol>
+          <li>Open this page in Chrome, tap <b>⋮</b> → <b>Add to Home screen</b> (or <b>Install app</b>).</li>
+          <li>In Spotify or YouTube Music, tap <b>Share</b> → <b>streamBud</b>.</li>
+          <li>The other link is ready to copy (or already copied).</li>
+        </ol>
+        <h3>iPhone</h3>
+        <p>iOS doesn’t let web apps into the share sheet, but a one-minute Shortcut does the same thing:</p>
+        <ol>
+          <li>Open the <b>Shortcuts</b> app → <b>+</b>. Tap the <b>ⓘ</b> and turn on <b>Show in Share Sheet</b>.</li>
+          <li>Add the action <b>URL Encode</b> (it encodes the <i>Shortcut Input</i>).</li>
+          <li>Add <b>Open URLs</b> with this, putting the <i>URL Encoded Text</i> at the end:<br>
+            <code id="shortcut-url">https://your-streambud-site/?text=</code></li>
+          <li>Name it <b>streamBud</b>. Now tap <b>Share</b> → <b>streamBud</b> in Spotify or YouTube Music.</li>
+        </ol>
+        <p>Tip: tap <b>Share</b> → <b>Add to Home Screen</b> in Safari to keep streamBud one tap away.</p>
+        <h3>Any device</h3>
+        <p>Links like <code id="deep-link">/?url=…</code> open streamBud and convert right away.</p>
+      </div>
+    </details>
+
+    <footer class="foot">
+      Free. No sign-up. No tracking. Works with songs and albums.
+      <br><a href="https://github.com/WalterGropius/streamBud" rel="noopener">Open source</a>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

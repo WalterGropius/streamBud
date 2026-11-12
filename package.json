@@ -1,0 +1,16 @@
+{
+  "name": "streambud",
+  "version": "1.0.0",
+  "description": "Paste a Spotify link, get the YouTube Music link (and the other way round).",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  }
+}
